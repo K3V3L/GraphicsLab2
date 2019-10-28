@@ -8,6 +8,7 @@
 float angleX=0.0, angleY=0.0;
 float lx=0.0f,ly=0.0f,lz=-1.0f;
 float x=0.0f,z=5.0f,y=1.0f;
+bool Solid = 1;
 
 void changeSize(int w, int h) {
 	if (h == 0)
@@ -45,36 +46,42 @@ void Display(void) {
 			    x+lx,   y+ly,   z+lz,
 			    0.0f,   1.0f,   0.0f);
     drawAxis();
-	for(int i = -3; i < 3; i++)
+	for(int i = -3; i < 3; i++){
 		for(int j=-3; j < 3; j++) {
 			glPushMatrix();
 			glTranslatef(i*10.0,0,j * 10.0);
-			glutSolidSphere(1,20,20);
+			Solid ? glutSolidSphere(1,20,20) : glutWireSphere(1,20,20);
 			glPopMatrix();
 		}
+	}
+	glTranslatef(100,5,100);
+	glutSolidSphere(2,20,20);
 	glutSwapBuffers();
 }
 
 void Keyboard(unsigned char key, int xx, int yy) {
-	float fraction = 0.1f;
+	float fraction = 1.0f;
 	switch (key) {
+		case 13:
+			Solid=!Solid;
+		break;
 		case 'h':
-			angleX -= 0.02f;
+			angleX -= 0.04f;
 			lx = sin(angleX);
 			lz = -cos(angleX);
 			break;
 		case 'l':
-			angleX += 0.02f;
+			angleX += 0.04f;
 			lx = sin(angleX);
 			lz = -cos(angleX);
 			break;
         case 'j':
-			angleY -= 0.02f;
+			angleY -= 0.04f;
 			ly = sin(angleY);
 			lz = -cos(angleY);
 			break;
         case 'k':
-			angleY += 0.02f;
+			angleY += 0.04f;
 			ly = sin(angleY);
 			lz = -cos(angleY);
 			break;
@@ -95,7 +102,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("3D figures");
+    glutCreateWindow("Lab2");
 	glutDisplayFunc(Display);
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(Keyboard);
